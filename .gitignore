@@ -1,0 +1,31 @@
+# NODE
+
+node_modules
+package-lock.json
+.env
+logs/*
+
+# REACT 
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+react/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+react/npm-debug.log*
+react/yarn-debug.log*
+react/yarn-error.log*
+react/.env

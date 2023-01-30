@@ -1,0 +1,46 @@
+stages:
+  - test
+  - build
+  - deploy
+
+before_script:
+
+test:
+  stage: test
+  only:
+    - main
+  tags: 
+    - test
+  script: echo "Running tests crm-api.com.ar"
+
+build:
+  stage: build
+  only:
+    - main
+  tags: 
+    - build
+  script: 
+    - echo "Accediendo al directorio de frontend"
+    - cd /home/mprediger/builds/$CI_RUNNER_SHORT_TOKEN/$CI_CONCURRENT_ID/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/react
+    - nvm use 17.7.2
+    - echo "Copiando directorio node_modules para build"
+    - cp -r /home/mprediger/node-server/node_modules/ ./
+    #- npm i react-scripts
+    - npm run build
+    - cd ../ 
+    - rsync -r /home/mprediger/builds/$CI_RUNNER_SHORT_TOKEN/$CI_CONCURRENT_ID/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/*  /home/mprediger/node-server/api-crm/
+    - pm2 restart server
+
+deploy_prod:
+  stage: deploy
+  tags: 
+    - deploy_prod
+  script:
+    - echo "Deploy to production server crm.baggio.com.ar"
+    - ssh -o StrictHostKeyChecking=no mprediger@192.168.53.75 "mkdir build_prod"
+  environment:
+    name: production
+    url: https://crm.baggio.com.ar
+  when: manual
+  only:
+    - main
