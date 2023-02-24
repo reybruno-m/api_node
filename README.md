@@ -23,7 +23,7 @@
 ##### Registro
 
 ```bash
-Host: http://192.9.200.193:8080/api/auth
+Host: http://127.0.0.1:8080/api/auth
 Method: POST
 Params: {
     "name": "bruno Rey",
